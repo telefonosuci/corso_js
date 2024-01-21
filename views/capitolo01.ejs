@@ -2,14 +2,29 @@
 <html lang="en">
 
   <head>
+
+    <scritp src="/javascripts/jquery.min.js"></scritp>
     <script>
-      alert("Benvenuti!");
+      alert("Benvenuti! 2");
 
 
+
+      console.log("Questo è un LOG");
+
+      setTimeout(function(){
+
+        console.error("Questo è un errore");
+
+      }, 3000);
+
+      console.warn("Questo è un warning");
+
+      console.table(["apples", "oranges", "bananas"]);
+
+      console.log("JQuery caricato: ", $);
     </script>
 
   </head>
-
 
   <body class="container">
 
@@ -19,7 +34,6 @@
         <h2>Primi passi con Javascript</h2>
       </div>
     </main>
-
 
   </body>
 </html>
