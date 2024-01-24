@@ -15,4 +15,8 @@ router.get('/capitolo02', function(req, res, next) {
   res.render('capitolo02', { title: 'Capitolo 02' });
 });
 
+router.get('/capitolo03', function(req, res, next) {
+  res.render('capitolo03', { title: 'Capitolo 03' });
+});
+
 module.exports = router;
