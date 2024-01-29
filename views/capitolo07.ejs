@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <scritp src="/javascripts/jquery.min.js"></scritp>
+
+    <scritp src="/javascripts/app.js"></scritp>
+
+    <script>
+
+      // Definizione di un oggetto con proprietà e un metodo
+      let persona = {
+          nome: "Mario",
+          età: 30,
+          saluta: function() {
+              console.log("Ciao, mi chiamo " + this.nome + " e ho " + this.età + " anni.");
+          }
+      };
+
+      // Utilizzo dell'oggetto e del metodo
+      console.log(persona.nome); // Output: Mario
+      console.log(persona.età);  // Output: 30
+      persona.saluta();          // Output: Ciao, mi chiamo Mario e ho 30 anni.
+
+
+    </script>
+
+
+    <script>
+
+      // Definizione di un oggetto con proprietà e un metodo utilizzando "this"
+      let auto = {
+          marca: "Toyota",
+          modello: "Corolla",
+          anno: 2022,
+          descrizione: function() {
+              return "La mia auto è una " + this.marca + " " + this.modello + " dell'anno " + this.anno + ".";
+          }
+      };
+
+      // Utilizzo dell'oggetto e del metodo
+      console.log(auto.marca);        // Output: Toyota
+      console.log(auto.descrizione()); // Output: La mia auto è una Toyota Corolla dell'anno 2022.
+
+
+    </script>
+
+  </head>
+
+  <body class="container">
+
+    <main>
+      <div>
+        <h1>Capitolo 05</h1>
+        <h2>Browser API</h2>
+      </div>
+    </main>
+
+  </body>
+</html>
