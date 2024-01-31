@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <scritp src="/javascripts/jquery.min.js"></scritp>
+
+  </head>
+
+  <body class="container">
+
+    <main>
+      <div>
+        <h1>Capitolo 11</h1>
+        <h2>Le Promise</h2>
+      </div>
+
+      <div>
+        <p>In questo esempio:</p>
+
+        <p>Quando l'utente fa clic sul pulsante "Avvia Processo", viene avviata un'operazione asincrona simulata con <code>simulateAsyncOperation()</code>.</p>
+
+        <p>Nel chaining di <code>.then()</code>, gestiamo il risultato della prima operazione, poi passiamo l'output alla successiva operazione. Questo processo può essere ripetuto per gestire più operazioni asincrone in sequenza.</p>
+
+        <p>In caso di errore, la funzione <code>.catch()</code> gestisce qualsiasi errore che si verifichi durante il processo.</p>
+
+      </div>
+
+      <div>
+
+        <button id="startProcess">Avvia Processo</button>
+<div id="resultContainer"></div>
+
+<script>
+function simulateAsyncOperation() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const success = Math.random() > 0.5; // Simuliamo successo o fallimento casualmente
+      if (success) {
+        resolve("Operazione completata con successo");
+      } else {
+        reject("Errore durante l'operazione");
+      }
+    }, 2000);
+  });
+}
+
+document.getElementById("startProcess").addEventListener("click", () => {
+  document.getElementById("resultContainer").textContent = "In corso...";
+
+  // Avviamo l'operazione asincrona e gestiamo il risultato tramite chaining di then
+  simulateAsyncOperation()
+    .then((result) => {
+      console.log(result);
+      return "Altre informazioni ottenute"; // Passiamo il risultato alla prossima operazione
+    })
+    .then((additionalInfo) => {
+      console.log(additionalInfo);
+      document.getElementById("resultContainer").textContent = `Risultato: ${additionalInfo}`;
+    })
+    .catch((error) => {
+      console.error("Errore generale:", error);
+      document.getElementById("resultContainer").textContent = `Errore: ${error}`;
+    });
+});
+</script>
+
+
+
+      <h1>Promise.all & Promise.race Example</h1>
+
+        <button onclick="runPromiseAll()">Run Promise.all</button>
+        <button onclick="runPromiseRace()">Run Promise.race</button>
+
+        <p id="result"></p>
+
+      </div>
+    </main>
+
+  </body>
+</html>
