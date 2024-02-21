@@ -6,7 +6,6 @@ var logger = require('morgan');
 var multer = require('multer');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/chapter');
 
 var app = express();
 
@@ -40,7 +39,7 @@ app.use('/', indexRouter);
 
 app.use('/upload', upload.single('file'));
 
-app.use('/chapter', usersRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
