@@ -1,36 +1,28 @@
 (function () {
-class EditableList extends HTMLElement {
-  constructor() {
-    // establish prototype chain
-    super();
 
+  class EditableList extends HTMLElement {
+    constructor() {
+      // establish prototype chain
+      super();
 
-    this.restListItems = [];
+      // attaches shadow tree and returns shadow root reference
+      // https://developer.mozilla.org/en-US/docs/Web/API/Element/attachShadow
+      const shadow = this.attachShadow({ mode: 'open' });
 
+      // creating a container for the editable-list component
+      const editableListContainer = document.createElement('div');
 
-    // attaches shadow tree and returns shadow root reference
-    // https://developer.mozilla.org/en-US/docs/Web/API/Element/attachShadow
-    const shadow = this.attachShadow({ mode: 'open' });
+      // get attribute values from getters
+      const title = this.title;
 
-    // creating a container for the editable-list component
-    const editableListContainer = document.createElement('div');
+      const addItemText = this.addItemText;
+      const listItems = this.items;
 
-    // get attribute values from getters
-    const title = this.title;
+      // adding a class to our container for the sake of clarity
+      editableListContainer.classList.add('editable-list');
 
-
-    console.log("Title: ", this.title);
-    console.log("HTML: ", this.innerHTML);
-
-
-    const addItemText = this.addItemText;
-    const listItems = this.items;
-
-    // adding a class to our container for the sake of clarity
-    editableListContainer.classList.add('editable-list');
-
-    // creating the inner HTML of the editable list element
-    editableListContainer.innerHTML = `
+      // creating the inner HTML of the editable list element
+      editableListContainer.innerHTML = `
       <style>
         li, div > div {
           display: flex;
@@ -64,103 +56,84 @@ class EditableList extends HTMLElement {
       </div>
     `;
 
-    // binding methods
+      // binding methods
       this.addListItem = this.addListItem.bind(this);
-    this.handleRemoveItemListeners = this.handleRemoveItemListeners.bind(this);
-    this.removeListItem = this.removeListItem.bind(this);
+      this.handleRemoveItemListeners = this.handleRemoveItemListeners.bind(this);
+      this.removeListItem = this.removeListItem.bind(this);
 
-    // appending the container to the shadow DOM
-    shadow.appendChild(editableListContainer);
-  }
-
-  // add items to the list
-  addListItem(e) {
-    const textInput = this.shadowRoot.querySelector('.add-new-list-item-input');
-
-    if (textInput.value) {
-      const li = document.createElement('li');
-      const button = document.createElement('button');
-      const childrenLength = this.itemList.children.length;
-
-      li.textContent = textInput.value;
-      button.classList.add('editable-list-remove-item', 'icon');
-      button.innerHTML = '&ominus;';
-
-      this.itemList.appendChild(li);
-      this.itemList.children[childrenLength].appendChild(button);
-
-      this.handleRemoveItemListeners([button]);
-
-      textInput.value = '';
+      // appending the container to the shadow DOM
+      shadow.appendChild(editableListContainer);
     }
-  }
 
-  // fires after the element has been attached to the DOM
-  connectedCallback() {
-    const removeElementButtons = [...this.shadowRoot.querySelectorAll('.editable-list-remove-item')];
-    const addElementButton = this.shadowRoot.querySelector('.editable-list-add-item');
+    // add items to the list
+    addListItem(e) {
+      const textInput = this.shadowRoot.querySelector('.add-new-list-item-input');
 
-    this.itemList = this.shadowRoot.querySelector('.item-list');
+      if (textInput.value) {
+        const li = document.createElement('li');
+        const button = document.createElement('button');
+        const childrenLength = this.itemList.children.length;
 
-    this.handleRemoveItemListeners(removeElementButtons);
-    addElementButton.addEventListener('click', this.addListItem, false);
+        li.textContent = textInput.value;
+        button.classList.add('editable-list-remove-item', 'icon');
+        button.innerHTML = '&ominus;';
 
+        this.itemList.appendChild(li);
+        this.itemList.children[childrenLength].appendChild(button);
 
-    if(this.getAttribute("list-retrieve-url")){
+        this.handleRemoveItemListeners([button]);
 
-      fetch(this.getAttribute("list-retrieve-url")).then(response => {
+        textInput.value = '';
+      }
+    }
 
-        console.log("RESPONSE LIST", response);
+    // fires after the element has been attached to the DOM
+    connectedCallback() {
+      const removeElementButtons = [...this.shadowRoot.querySelectorAll('.editable-list-remove-item')];
+      const addElementButton = this.shadowRoot.querySelector('.editable-list-add-item');
 
-        response.json().then(data => {
+      this.itemList = this.shadowRoot.querySelector('.item-list');
 
-          console.log("DATA LIST", data);
+      this.handleRemoveItemListeners(removeElementButtons);
+      addElementButton.addEventListener('click', this.addListItem, false);
+    }
 
-        });
+    // gathering data from element attributes
+    get title() {
+      return this.getAttribute('title') || '';
+    }
 
+    get items() {
+
+      const items = [];
+
+      [...this.attributes].forEach(attr => {
+        if (attr.name.includes('list-item')) {
+          items.push(attr.value);
+        }
+      });
+
+      return items;
+    }
+
+    get addItemText() {
+      return this.getAttribute('add-item-text') || '';
+    }
+
+    handleRemoveItemListeners(arrayOfElements) {
+      arrayOfElements.forEach(element => {
+        element.addEventListener('click', this.removeListItem, false);
       });
     }
 
+    removeListItem(e) {
+      e.target.parentNode.remove();
+    }
   }
 
-  // gathering data from element attributes
-  get title() {
-    return this.getAttribute('title') || '';
-  }
-
-  get items() {
-    const items = [];
-
-    [...this.attributes].forEach(attr => {
-      if (attr.name.includes('list-item')) {
-        items.push(attr.value);
-      }
-    });
-
-    return items;
-  }
-
-  get addItemText() {
-    return this.getAttribute('add-item-text') || '';
-  }
-
-  handleRemoveItemListeners(arrayOfElements) {
-    arrayOfElements.forEach(element => {
-      element.addEventListener('click', this.removeListItem, false);
-    });
-  }
-
-  removeListItem(e) {
-    e.target.parentNode.remove();
-  }
-}
-
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  // let the browser know about the custom element
-  customElements.define('editable-list', EditableList);
-
-});
+  document.addEventListener("DOMContentLoaded", () => {
+    // let the browser know about the custom element
+    customElements.define('editable-list', EditableList);
+  });
 
 })();

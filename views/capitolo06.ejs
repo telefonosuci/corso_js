@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <script>
+
+    // Definiamo una funzione esterna che prende un parametro
+    function creaFunzione(moltiplicatore) {
+      // Definiamo una funzione interna che prende un parametro e lo moltiplica per il parametro della funzione esterna
+      return function (numero) {
+        return numero * moltiplicatore;
+      };
+    }
+
+    // Utilizziamo la funzione esterna per creare una nuova funzione che moltiplica per 2
+    var moltiplicaPerDue = creaFunzione(2);
+
+    // Utilizziamo la nuova funzione per moltiplicare un numero per 2
+    console.log(moltiplicaPerDue(5)); // Output: 10
+
+  </script>
+
+
+
+  <script>
+    function eseguiOperazioneAsync(a, b, successCallback, errorCallback) {
+      // Simuliamo un'operazione asincrona (ad esempio, una richiesta HTTP)
+      setTimeout(function () {
+        // Verifichiamo se i due numeri sono positivi
+        if (a >= 0 && b >= 0) {
+          // Se entrambi i numeri sono positivi, chiamiamo la callback di successo
+          successCallback(a + b);
+        } else {
+          // Altrimenti, chiamiamo la callback di errore
+          errorCallback("I numeri devono essere positivi");
+        }
+      }, 1000); // Simuliamo un ritardo di 1 secondo
+    }
+
+    // Definiamo una callback di successo che stampa il risultato
+    function onSuccess(result) {
+      console.log("Risultato:", result);
+    }
+
+    // Definiamo una callback di errore che stampa un messaggio di errore
+    function onError(errorMessage) {
+      console.error("Errore:", errorMessage);
+    }
+
+    // Chiamiamo la funzione eseguiOperazioneAsync con due numeri e le callback di successo e errore
+    eseguiOperazioneAsync(5, 3, onSuccess, onError); // Output: Risultato: 8
+    eseguiOperazioneAsync(-1, 3, onSuccess, onError); // Output: Errore: I numeri devono essere positivi
+
+  </script>
+
+</head>
+
+<body class="container">
+
+  <main>
+
+    <h1>Capitolo 06</h1>
+    <h2>Funzioni - Aspetti avanzati</h2>
+    <p>Usa i <strong>dev-tools</strong> per testare il codice incluso nella pagina</p>
+
+
+
+    <div>
+      <canvas id="myCanvas" width="400" height="400"></canvas>
+    </div>
+  </main>
+
+
+
+</body>
+
+<script>
+  // Funzione esterna che ritorna una funzione per disegnare un quadrato
+  function creaDisegnatoreQuadrato(ctx, size, color) {
+    return function (x, y) {
+      ctx.fillStyle = color;
+      ctx.fillRect(x, y, size, size);
+    };
+  }
+
+  // Ottieni il riferimento al canvas
+  var canvas = document.getElementById('myCanvas');
+  var ctx = canvas.getContext('2d');
+
+  // Utilizziamo la funzione esterna per creare una funzione per disegnare un quadrato rosso di dimensione 50x50
+  var disegnaQuadratoRosso = creaDisegnatoreQuadrato(ctx, 50, 'red');
+
+  // Disegna un quadrato rosso sul canvas nelle coordinate (50, 50)
+  disegnaQuadratoRosso(50, 50);
+
+  // Utilizziamo la funzione esterna per creare una funzione per disegnare un quadrato blu di dimensione 100x100
+  var disegnaQuadratoBlu = creaDisegnatoreQuadrato(ctx, 100, 'blue');
+
+  // Disegna un quadrato blu sul canvas nelle coordinate (150, 150)
+  disegnaQuadratoBlu(150, 150);
+</script>
+
+</html>

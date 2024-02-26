@@ -3,24 +3,18 @@
 
   <head>
 
-    <script src="/javascripts/jquery.min.js"></script>
-
-    <script src="/javascripts/app.js"></script>
-
     <script>
 
-      let numeri = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      debugger;
 
-      for (let i = 0; i < numeri.length; i++) {
-          if (numeri[i] === 3) {
-            console.log("Abbiamo trovato il valore 3, saltiamo questa iterazione.");
-            continue;
-          } else if (numeri[i] === 5) {
-            console.log("Abbiamo trovato il valore 3, saltiamo questa iterazione.");
-            break;
-          }
+      let numero = 10;
 
-          console.log("Valore corrente: " + numeri[i]);
+      if (numero > 0) {
+          console.log("Il numero è positivo");
+      } else if (numero < 0) {
+          console.log("Il numero è negativo");
+      } else {
+          console.log("Il numero è zero");
       }
 
     </script>
@@ -30,10 +24,14 @@
   <body class="container">
 
     <main>
-      <div>
-        <h1>Capitolo 03</h1>
-        <h2>Primi passi con Javascript</h2>
-      </div>
+      <h1>Capitolo 03</h1>
+
+      <h2>Controllo del flusso</h2>
+
+
+      <p>Usa i <strong>dev-tools</strong>  per testare il codice incluso nella pagina</p>
+
+
     </main>
 
   </body>
