@@ -1,98 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
+<head>
 
-    <script src="/javascripts/jquery.min.js"></script>
+    <%- include('includes/styles') %>
 
     <style>
-      /* Stili per la finestra modale */
-      .modal {
-          display: none;
-          position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          padding: 20px;
-          background-color: #fff;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      html {
+        font-size: 90%;
       }
 
-      /* Stili per lo sfondo di overlay */
-      .overlay {
-          display: none;
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(0, 0, 0, 0.5);
+      body {
+        color: #2b2b2b;
+        font-family: sans-serif;
+        margin: 0 auto;
+        /*max-width: 350px;
+            */
+        padding-top: 5rem;
+      }
+
+      editable-list {
+        width: 300px;
       }
     </style>
 
-  </head>
 
-  <body class="container">
-
-    <main>
-      <div>
-        <h1>Capitolo 12</h1>
-        <h2>Le classi in Javascript</h2>
-      </div>
-
-      <div>
-
-        <input type="file" id="fileInput" />
-        <button onclick="caricaFile()">Carica File</button>
-        <div id="risultato"></div>
-
-      </div>
-
-    </main>
-
-    <script>
-      function caricaFile() {
-          var fileInput = document.getElementById('fileInput');
-          var risultatoDiv = document.getElementById('risultato');
-
-          // Assicurati che sia stato selezionato un file
-          if (fileInput.files.length > 0) {
-              var file = fileInput.files[0];
-              var reader = new FileReader();
-
-              reader.onload = function(e) {
-                  var content = e.target.result;
-                  risultatoDiv.innerHTML = "<strong>Contenuto del file:</strong><br>" + content;
-              };
-
-              // Leggi il contenuto del file come testo
-              reader.readAsText(file);
-
-
-              // Da qui in poi, generiamo i fprm data e li mandiamo al server
-              var formData = new FormData();
-
-              formData.append('file', file);
-
-              fetch('/caricafile', {
-                  method: 'POST',
-                  body: formData
-              })
-              .then(response => response.text())
-              .then(data => {
-                  risultatoDiv.innerHTML = data;
-              })
-              .catch(error => {
-                  risultatoDiv.innerHTML = '<strong>Errore durante il caricamento del file.</strong>';
-                  console.error('Errore durante il caricamento del file:', error);
-              });
-
-
-
-          } else {
-              risultatoDiv.innerHTML = "<strong>Errore:</strong> Seleziona un file prima di fare clic su 'Carica File'.";
-          }
+    <style>
+      /* Styles for the custom expandable navigation */
+      .custom-nav {
+        color: #fff;
+        padding: 10px;
       }
-    </script>
-  </body>
+      .custom-nav ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+      .custom-nav li {
+        margin-bottom: 5px;
+      }
+      .custom-nav li.has-children > ul {
+        display: none;
+      }
+      .custom-nav li.has-children.expanded > ul {
+        display: block;
+      }
+      .custom-nav a {
+        color: #fff;
+        text-decoration: none;
+      }
+    </style>
+
+</head>
+
+<body class="container">
+
+  <!-- Definizione del custom web component per la navigazione a livelli -->
+  <template id="custom-expandable-nav-template">
+    <style>
+      /* Styles for the custom expandable navigation web component */
+      .custom-nav {
+        color: #fff;
+        padding: 10px;
+      }
+      .custom-nav ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+      .custom-nav li {
+        margin-bottom: 5px;
+      }
+      .custom-nav li.has-children > ul {
+        display: none;
+      }
+      .custom-nav li.has-children.expanded > ul {
+        display: block;
+      }
+      .custom-nav a {
+        color: #fff;
+        text-decoration: none;
+      }
+    </style>
+    <div class="custom-nav">
+      <slot name="items"></slot>
+    </div>
+  </template>
+
+  <!-- Utilizzo del custom web component -->
+  <custom-expandable-nav class="custom-nav">
+    <ul slot="items">
+      <li><a href="#">Home</a></li>
+      <li class="has-children">
+        <a href="#">Products</a>
+        <ul>
+          <li><a href="#">Product 1</a></li>
+          <li><a href="#">Product 2</a></li>
+          <li><a href="#">Product 3</a></li>
+        </ul>
+      </li>
+      <li class="has-children">
+        <a href="#">Services</a>
+        <ul>
+          <li><a href="#">Service 1</a></li>
+          <li><a href="#">Service 2</a></li>
+          <li><a href="#">Service 3</a></li>
+        </ul>
+      </li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </custom-expandable-nav>
+
+  <main>
+    <h1>Capitolo 14</h1>
+    <h2>I sorgenti e i bundle</h2>
+
+    <div>
+
+      <h3>Editable list:</h3>
+      <div style="max-width: 300px; padding: 10px;">
+        <editable-list title="TODO" list-retrieve-url="/todos" list-item-0="First item on the list"
+          list-item-1="Second item on the list" list-item-2="Third item on the list"
+          list-item-3="Fourth item on the list" list-item-4="Fifth item on the list" listItem="This will not appear"
+          add-item-text="Add new :">
+        </editable-list>
+      </div>
+      <hr />
+
+      <h3>Expanding list:</h3>
+      <div style="padding: 10px">
+        <expanding-list>
+          <li>
+            UK
+            <ul>
+              <li>
+                Yorkshire
+                <ul>
+                  <li>
+                    Leeds
+                    <ul>
+                      <li>Train station</li>
+                      <li>Town hall</li>
+                      <li>Headrow</li>
+                    </ul>
+                  </li>
+                  <li>Bradford</li>
+                  <li>Hull</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>
+            USA
+            <ul>
+              <li>
+                California
+                <ul>
+                  <li>Los Angeles</li>
+                  <li>San Francisco</li>
+                  <li>Berkeley</li>
+                </ul>
+              </li>
+              <li>Nevada</li>
+              <li>Oregon</li>
+            </ul>
+          </li>
+        </expanding-list>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="/javascripts/main.bundle.js"></script>
+  <script src="/javascripts/listing-page.bundle.js"></script>
+
+</body>
+
 </html>

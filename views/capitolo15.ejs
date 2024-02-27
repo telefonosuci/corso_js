@@ -36,8 +36,8 @@
 
     <main>
       <div>
-        <h1>Capitolo 12</h1>
-        <h2>Le classi in Javascript</h2>
+        <h1>Capitolo 15</h1>
+        <h2>Storage e file API</h2>
       </div>
 
       <div>
@@ -49,6 +49,30 @@
       </div>
 
     </main>
+
+
+
+    <script>
+      function setCookie(nome, valore, scadenzaGiorni) {
+          var dataScadenza = new Date();
+          dataScadenza.setTime(dataScadenza.getTime() + (scadenzaGiorni * 24 * 60 * 60 * 1000));
+          var scadenza = "expires=" + dataScadenza.toUTCString();
+          document.cookie = nome + "=" + valore + ";" + scadenza + ";path=/";
+      }
+
+      // Esempio di utilizzo
+      setCookie("username", "mioUtente", 30); // Imposta un cookie con il nome "username", valore "mioUtente" e scadenza di 30 giorni
+
+    </script>
+
+
+    <script>
+      localStorage.setItem("nomeUtente", "mioUtente");
+
+        // Esempio di utilizzo
+        var nomeUtente = localStorage.getItem("nomeUtente"); // Recupera il valore memorizzato con chiave "nomeUtente"
+
+    </script>
 
     <script>
       function caricaFile() {

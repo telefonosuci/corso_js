@@ -3,74 +3,61 @@
 
 <head>
 
-  <script src="/javascripts/jquery.min.js"></script>
-  <script src="/javascripts/listing-page.bundle.js"></script>
+  <%- include('includes/styles') %>
 
-
-  <style>
-    html {
-      font-size: 90%;
-    }
-
-    body {
-      color: #2b2b2b;
-      font-family: sans-serif;
-      margin: 0 auto;
-      /*max-width: 350px;
-          */
-      padding-top: 5rem;
-    }
-
-    editable-list {
-      width: 300px;
-    }
-  </style>
-
-
-  <style>
-    ul {
-      list-style-type: none;
-    }
-
-    li::before {
-      display: inline-block;
-      width: 1rem;
-      height: 1rem;
-      margin-right: 0.25rem;
-      content: "";
-      border-bottom: 2px solid #000;
-    }
-
-    .open::before,
-    .closed::before {
-      background-size: 1rem 1rem;
-      position: relative;
-      top: 0.25rem;
-    }
-
-    .open::before {
-      width: 12px;
-      height: 12px;
-      border-bottom: 2px solid black;
-      border-left: 2px solid black;
-    }
-
-    .closed::before {
-      width: 12px;
-      height: 12px;
-      border-bottom: 4px solid black;
-    }
-
-    .closed .closed::before,
-    .closed .open::before {
-      display: none;
-    }
-  </style>
 </head>
 
 <body class="container">
 
   <main>
+
+    <!-- Definizione del custom web component -->
+    <template id="custom-input-template">
+      <style>
+          /* Stili per il componente */
+          .custom-input {
+              margin-bottom: 10px;
+          }
+          label {
+              display: block;
+              font-weight: bold;
+          }
+          input {
+              width: 100%;
+              padding: 5px;
+          }
+      </style>
+      <div class="custom-input">
+          <label></label>
+          <input type="text">
+      </div>
+    </template>
+
+    <!-- Registrazione del custom web component -->
+    <script>
+      // Definiamo la classe del custom web component
+      class CustomInput extends HTMLElement {
+          constructor() {
+              super();
+
+              // Creiamo un'istanza del template e lo cloniamo
+              const template = document.getElementById('custom-input-template');
+              const templateContent = template.content;
+
+              // Aggiungiamo il template al DOM shadow
+              const shadowRoot = this.attachShadow({ mode: 'open' });
+              shadowRoot.appendChild(templateContent.cloneNode(true));
+
+              // Aggiungiamo il testo dell'etichetta
+              const label = shadowRoot.querySelector('label');
+              label.textContent = this.getAttribute('label');
+          }
+      }
+
+      // Registriamo il custom web component
+      customElements.define('custom-input', CustomInput);
+    </script>
+
     <div>
       <h1>Capitolo 13</h1>
       <h2>Custom web components</h2>
@@ -78,69 +65,14 @@
 
     <div>
 
-      <h3>Editable list:</h3>
-      <div style="max-width: 300px; padding: 10px;">
-        <editable-list
-          title="TODO"
-          list-retrieve-url="/todos"
-          list-item-0="First item on the list"
-          list-item-1="Second item on the list"
-          list-item-2="Third item on the list"
-          list-item-3="Fourth item on the list"
-          list-item-4="Fifth item on the list"
-          listItem="This will not appear"
-          add-item-text="Add new :"
-        >
-        </editable-list>
-      </div>
-      <hr />
-
-      <h3>Expanding list:</h3>
-      <div style="padding: 10px">
-        <expanding-list>
-          <li>
-            UK
-            <ul>
-              <li>
-                Yorkshire
-                <ul>
-                  <li>
-                    Leeds
-                    <ul>
-                      <li>Train station</li>
-                      <li>Town hall</li>
-                      <li>Headrow</li>
-                    </ul>
-                  </li>
-                  <li>Bradford</li>
-                  <li>Hull</li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-          <li>
-            USA
-            <ul>
-              <li>
-                California
-                <ul>
-                  <li>Los Angeles</li>
-                  <li>San Francisco</li>
-                  <li>Berkeley</li>
-                </ul>
-              </li>
-              <li>Nevada</li>
-              <li>Oregon</li>
-            </ul>
-          </li>
-        </expanding-list>
-      </div>
-
+      <!-- Utilizzo del custom web component -->
+      <custom-input label="Nome"></custom-input>
+      <custom-input label="Email"></custom-input>
 
     </div>
 
-  </main>
 
+  </main>
 
 
 </body>
