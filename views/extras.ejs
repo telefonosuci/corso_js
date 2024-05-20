@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <%- include('includes/styles') %>
+
+
+</head>
+
+<body class="container">
+
+  <main>
+    <div>
+      <h1>Extra content</h1>
+      <h2>Pagina bonus</h2>
+      <button class="card-button">Read from card</button>
+      <button class="serial-button">Read from card - serial</button>
+    </div>
+  </main>
+
+</body>
+
+<script>
+
+  const usbVendorId = 0x058F
+
+
+  let options = {
+    filters: [
+      { usbVendorId }
+    ]
+  };
+
+  async function connectToCardReader() {
+    try {
+      const device = await navigator.usb.requestDevice(options);
+      console.log('Device:', device);
+
+      device.open()
+      .then(() => {
+        console.log('Device opened');
+        // You can now communicate with the device
+      })
+      .catch(error => {
+
+        console.error('Error name:', error.name);
+
+        if (error.name === 'NotAllowedError' || error.name === 'NotFoundError') {
+          console.error('Permission denied or device not found. Please ensure the device is connected and permission is granted.');
+        } else {
+          console.error('Error:', error);
+        }
+      });
+
+      //await device.selectConfiguration(1);
+      //await device.claimInterface(0);
+
+      /*
+      device.addEventListener('inputreport', event => {
+        const data = new Uint8Array(event.data.buffer);
+        // Process the data from the card reader
+        console.log('Card data:', data);
+      });
+
+      */
+      // Start listening for data from the card reader
+      // await device.transferIn(1, 64); // Adjust endpoint and packet size as needed
+    } catch (error) {
+      console.error('Error connecting to device:', error);
+    }
+  }
+
+
+  navigator.serial.addEventListener("connect", (e) => {
+    // Connect to `e.target` or add it to a list of available ports.
+  });
+
+  navigator.serial.addEventListener("disconnect", (e) => {
+    // Remove `e.target` from the list of available ports.
+  });
+
+  navigator.serial.getPorts().then((ports) => {
+    // Initialize the list of available ports with `ports` on page load.
+  });
+
+
+
+  const button = document.querySelector('.card-button');
+  button.addEventListener('click', connectToCardReader);
+
+
+
+  const serialButton = document.querySelector('.serial-button');
+
+  serialButton.addEventListener("click", () => {
+
+    navigator.serial
+      .requestPort(options)
+      .then((port) => {
+        console.log('Port:', port);
+        // Connect to `port` or add it to the list of available ports.
+      })
+      .catch((e) => {
+        // The user didn't select a port.
+      });
+  });
+
+</script>
+
+
+</html>

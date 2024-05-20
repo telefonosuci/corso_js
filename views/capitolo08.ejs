@@ -1,59 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
+<head>
+  <%- include('includes/styles') %>
+</head>
 
-    <%- include('includes/styles') %>
+<body class="container">
 
-    <script>
+  <main>
+    <div>
+      <h1>Capitolo 08</h1>
+      <h2>Eventi</h2>
+    </div>
 
-      // Definizione di un oggetto con proprietà e un metodo
-      let persona = {
-          nome: "Mario",
-          età: 30,
-          saluta: function() {
-              console.log("Ciao, mi chiamo " + this.nome + " e ho " + this.età + " anni.");
-          }
-      };
-
-      // Utilizzo dell'oggetto e del metodo
-      console.log(persona.nome); // Output: Mario
-      console.log(persona.età);  // Output: 30
-      persona.saluta();          // Output: Ciao, mi chiamo Mario e ho 30 anni.
-
-
-    </script>
-
-
-    <script>
-
-      // Definizione di un oggetto con proprietà e un metodo utilizzando "this"
-      let auto = {
-          marca: "Toyota",
-          modello: "Corolla",
-          anno: 2022,
-          descrizione: function() {
-              return "La mia auto è una " + this.marca + " " + this.modello + " dell'anno " + this.anno + ".";
-          }
-      };
-
-      // Utilizzo dell'oggetto e del metodo
-      console.log(auto.marca);        // Output: Toyota
-      console.log(auto.descrizione()); // Output: La mia auto è una Toyota Corolla dell'anno 2022.
-
-
-    </script>
-
-  </head>
-
-  <body class="container">
-
-    <main>
-      <div>
-        <h1>Capitolo 08</h1>
-        <h2>Eventi</h2>
+    <div id="outer">
+      <div id="inner">
+        <button id="btn">Click me</button>
       </div>
-    </main>
+    </div>
 
-  </body>
+    <button id="triggerBtn">Trigger Custom Event</button>
+
+    <script>
+      // Creiamo un nuovo evento personalizzato chiamato "customEvent"
+      const customEvent = new Event('customEvent');
+
+      // Aggiungiamo un gestore per l'evento personalizzato al documento
+      document.addEventListener('customEvent', function(event) {
+          console.log('Custom event triggered!');
+      });
+
+      // Aggiungiamo un gestore per un evento di clic sul pulsante di attivazione
+      const triggerBtn = document.getElementById('triggerBtn');
+      triggerBtn.addEventListener('click', function() {
+          // Scateniamo l'evento personalizzato quando viene cliccato il pulsante
+          document.dispatchEvent(customEvent);
+      });
+    </script>
+
+    <script>
+      const outerDiv = document.getElementById('outer');
+      const innerDiv = document.getElementById('inner');
+      const button = document.getElementById('btn');
+
+      // Bubbling
+      button.addEventListener('click', function () {
+        console.log('Button clicked');
+      });
+
+      innerDiv.addEventListener('click', function () {
+        console.log('Inner div clicked');
+      });
+
+      outerDiv.addEventListener('click', function () {
+        console.log('Outer div clicked');
+      });
+
+      // Capturing
+      button.addEventListener('click', function () {
+        console.log('Button clicked capturing');
+      }, true);
+
+      innerDiv.addEventListener('click', function () {
+        console.log('Inner div clicked capturing');
+      }, true);
+
+      outerDiv.addEventListener('click', function () {
+        console.log('Outer div clicked capturing');
+      }, true);
+    </script>
+
+  </main>
+
+</body>
+
 </html>
